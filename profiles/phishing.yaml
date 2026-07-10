@@ -1,0 +1,4 @@
+name: phishing
+description: Email headers, browser history around click time, downloaded payloads.
+modules: [browser, malware, ioc]
+rules: [scope_summary, suspicious_url, payload_download]

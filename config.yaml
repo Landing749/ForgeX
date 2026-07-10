@@ -1,0 +1,26 @@
+# Forgex global configuration
+
+case_root: "./cases"
+
+theme: "default"
+
+hash_algorithms:
+  - sha256
+  - md5
+
+report:
+  default_formats: ["json", "markdown"]
+  include_severity: true
+  include_confidence: true
+
+plugins:
+  directories:
+    - "./plugins"
+  enabled: true
+
+profiles:
+  directory: "./profiles"
+
+logging:
+  level: "INFO"
+  file: null

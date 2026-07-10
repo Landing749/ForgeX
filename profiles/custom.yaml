@@ -1,0 +1,4 @@
+name: custom
+description: Empty template for user-defined investigation profiles.
+modules: []
+rules: [scope_summary]
