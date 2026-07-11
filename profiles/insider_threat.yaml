@@ -1,0 +1,4 @@
+name: insider_threat
+description: USB history, large file access/copy patterns, off-hours activity.
+modules: [windows, filesystem, browser]
+rules: [scope_summary, usb_activity, off_hours_access]

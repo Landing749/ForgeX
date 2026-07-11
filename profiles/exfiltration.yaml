@@ -1,0 +1,4 @@
+name: exfiltration
+description: Outbound network activity, cloud storage/browser uploads, archive creation.
+modules: [network, browser, filesystem]
+rules: [scope_summary, archive_creation, external_ip_contact]

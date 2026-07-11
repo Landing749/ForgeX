@@ -1,0 +1,4 @@
+name: quick
+description: Fast triage pass -- filesystem metadata, entropy anomalies, basic timeline.
+modules: [filesystem, metadata]
+rules: [scope_summary, entropy_cluster]

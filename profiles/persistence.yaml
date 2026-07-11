@@ -1,0 +1,4 @@
+name: persistence
+description: Autoruns -- services, scheduled tasks, LaunchAgents, registry Run keys.
+modules: [windows, macos, linux]
+rules: [scope_summary, persistence_mechanism_detected]

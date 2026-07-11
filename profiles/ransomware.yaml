@@ -1,0 +1,4 @@
+name: ransomware
+description: Detect mass file encryption -- entropy spikes, extension renames, ransom notes.
+modules: [filesystem, metadata]
+rules: [scope_summary, entropy_cluster, ransom_note_detection]
