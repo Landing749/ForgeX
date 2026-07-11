@@ -13,13 +13,19 @@ report:
   include_severity: true
   include_confidence: true
 
+# plugins.directories and profiles.directory are intentionally omitted
+# here: leaving them unset lets Forgex fall back to the copies bundled
+# inside the installed package (see core/config.py), so `forgex` finds
+# its built-in profiles and example plugin no matter which directory
+# it's run from. If you want extra plugins/profiles of your own on top
+# of the bundled ones, drop a project-local config.yaml with:
+#
+#   plugins:
+#     directories: ["./plugins"]
+#   profiles:
+#     directory: "./profiles"
 plugins:
-  directories:
-    - "./plugins"
   enabled: true
-
-profiles:
-  directory: "./profiles"
 
 logging:
   level: "INFO"
