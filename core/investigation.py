@@ -121,7 +121,16 @@ DEFAULT_RULES: list[RuleFn] = [rule_note_scan_scope, rule_large_high_entropy_fil
 
 
 class InvestigationEngine:
-    def __init__(self, profiles_dir: str | Path = "profiles"):
+    def __init__(self, profiles_dir: str | Path | None = None):
+        if profiles_dir is None:
+            # No explicit directory given: ask config for the
+            # configured profiles directory. This defaults to the
+            # profiles/ shipped inside the installed package (see
+            # core/config.py), so investigate --profile works no
+            # matter what directory forgex is run from, instead of
+            # only working when cwd happens to be the repo root.
+            from core.config import get_config
+            profiles_dir = get_config().get("profiles.directory", "profiles")
         self.profiles_dir = Path(profiles_dir)
 
     def load_profile(self, name: str) -> dict[str, Any]:
