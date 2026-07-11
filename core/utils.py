@@ -21,6 +21,13 @@ from typing import Any
 from core.evidence import compute_hashes
 from core.metadata import shannon_entropy
 
+# Root of the installed Forgex package (…/forgex, the parent of core/,
+# cli/, modules/). Anchoring bundled resources (config.yaml, profiles/,
+# the stock plugins/ dir) to this path — instead of to whatever the
+# current working directory happens to be — is what lets `forgex` run
+# correctly no matter which directory it's invoked from.
+PACKAGE_ROOT = Path(__file__).resolve().parent.parent
+
 # -- file identify -------------------------------------------------------
 _MAGIC_SIGNATURES: list[tuple[bytes, str]] = [
     (b"\x4d\x5a", "PE executable (MZ)"),
