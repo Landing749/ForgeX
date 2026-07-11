@@ -12,6 +12,18 @@ from typing import Any
 
 import yaml
 
+from core.utils import PACKAGE_ROOT
+
+# case_root is deliberately left cwd-relative: it's the user's own,
+# per-invocation case workspace, so "wherever I happen to be running
+# forgex from" is the right default for it.
+#
+# profiles.directory and plugins.directories point at the copies that
+# ship *inside the installed package* rather than at "./profiles" /
+# "./plugins". Those are bundled resources, not per-project files, so
+# they need to resolve the same way no matter what directory forgex is
+# invoked from (e.g. after `pip install forgex`, running `forgex
+# investigate ... --profile ransomware` from any directory).
 DEFAULT_CONFIG: dict[str, Any] = {
     "case_root": "./cases",
     "theme": "default",
@@ -21,8 +33,8 @@ DEFAULT_CONFIG: dict[str, Any] = {
         "include_severity": True,
         "include_confidence": True,
     },
-    "plugins": {"directories": ["./plugins"], "enabled": True},
-    "profiles": {"directory": "./profiles"},
+    "plugins": {"directories": [str(PACKAGE_ROOT / "plugins")], "enabled": True},
+    "profiles": {"directory": str(PACKAGE_ROOT / "profiles")},
     "logging": {"level": "INFO", "file": None},
 }
 
@@ -46,12 +58,26 @@ class Config:
 
     @classmethod
     def load(cls, path: str | Path | None = None) -> Config:
-        candidate = Path(path) if path else Path("config.yaml")
-        if candidate.exists():
-            with candidate.open("r", encoding="utf-8") as fh:
-                loaded = yaml.safe_load(fh) or {}
-            merged = _deep_merge(DEFAULT_CONFIG, loaded)
-            return cls(merged, source=candidate)
+        if path:
+            # An explicit path always wins.
+            candidates = [Path(path)]
+        else:
+            candidates = [
+                # A config.yaml in the current directory lets a user
+                # override settings per-project/per-case.
+                Path("config.yaml"),
+                # Otherwise fall back to the one bundled with the
+                # installed package, so forgex has sane settings even
+                # when run from a directory with no config.yaml of its
+                # own.
+                PACKAGE_ROOT / "config.yaml",
+            ]
+        for candidate in candidates:
+            if candidate.exists():
+                with candidate.open("r", encoding="utf-8") as fh:
+                    loaded = yaml.safe_load(fh) or {}
+                merged = _deep_merge(DEFAULT_CONFIG, loaded)
+                return cls(merged, source=candidate)
         return cls(copy.deepcopy(DEFAULT_CONFIG), source=None)
 
     def get(self, dotted_key: str, default: Any = None) -> Any:
